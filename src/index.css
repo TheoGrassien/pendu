@@ -15,3 +15,7 @@ code {
 h1 {
   letter-spacing: 8px;
 }
+
+.error {
+  color: red;
+}

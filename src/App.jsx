@@ -6,6 +6,7 @@ function App() {
   const [hideWord, setHideWord] = useState(null);
   const [errorCount, setErrorCount] = useState(0);
   const [gameStatus, setGameStatus] = useState("ongoing");
+  const [errorMessage, setErrorMessage] = useState(null);
 
   const fetchWord = async () => {
     fetch("http://localhost:3001/", {
@@ -18,7 +19,11 @@ function App() {
       }),
     })
       .then((res) => res.json())
-      .then((word) => setWord(word.word));
+      .then((word) => setWord(word.word))
+      .catch((err) => {
+        console.log(err.message);
+        setErrorMessage("Impossible de récupérer les données");
+      });
   };
 
   useEffect(() => {
@@ -63,7 +68,6 @@ function App() {
 
   const checkWord = (letter) => {
     if (errorCount >= 10) {
-      console.log("perdu");
       setGameStatus("failed");
       return;
     }
@@ -82,10 +86,17 @@ function App() {
     }
   };
 
+  window.addEventListener("keyup", (e) => {
+    if (e.key.match(/[a-z]/i)) {
+      checkWord(e.key);
+    }
+  });
+
   return (
     <div className="App">
       <p>Vous avez fait {errorCount} erreur(s)</p>
       <h1>{hideWord}</h1>
+      {errorMessage ? <p className="error">{errorMessage}</p> : ""}
       <div className="keyboard">
         {alphabet.map((letter) => {
           return (
@@ -95,6 +106,7 @@ function App() {
           );
         })}
       </div>
+      {gameStatus == "failed" ? <p>Vous avez perdu</p> : ""}
     </div>
   );
 }
