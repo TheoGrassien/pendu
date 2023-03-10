@@ -12,8 +12,11 @@ code {
     monospace;
 }
 
-h1 {
+.word {
+  font-size: 2rem;
   letter-spacing: 8px;
+  margin: 16px 0;
+  font-weight: 700;
 }
 
 .error {

@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button } from "./components/button/Button";
+import { Draw } from "./components/draw/Draw";
 
 function App() {
   const [word, setWord] = useState(null);
@@ -7,6 +8,7 @@ function App() {
   const [errorCount, setErrorCount] = useState(0);
   const [gameStatus, setGameStatus] = useState("ongoing");
   const [errorMessage, setErrorMessage] = useState(null);
+  const maxError = 10;
 
   const fetchWord = async () => {
     fetch("http://localhost:3001/", {
@@ -35,7 +37,6 @@ function App() {
       setHideWord("_".repeat(word.length));
     }
   }, [word]);
-  console.log(word);
 
   const alphabet = [
     "a",
@@ -67,8 +68,9 @@ function App() {
   ];
 
   const checkWord = (letter) => {
-    if (errorCount >= 10) {
+    if (errorCount >= maxError) {
       setGameStatus("failed");
+      setErrorCount(maxError + 1);
       return;
     }
 
@@ -86,16 +88,16 @@ function App() {
     }
   };
 
-  window.addEventListener("keyup", (e) => {
-    if (e.key.match(/[a-z]/i)) {
-      checkWord(e.key);
-    }
-  });
+  const restart = () => {
+    setErrorCount(0);
+    setGameStatus("ongoing");
+    fetchWord();
+  };
 
   return (
     <div className="App">
       <p>Vous avez fait {errorCount} erreur(s)</p>
-      <h1>{hideWord}</h1>
+      <div className="word">{hideWord}</div>
       {errorMessage ? <p className="error">{errorMessage}</p> : ""}
       <div className="keyboard">
         {alphabet.map((letter) => {
@@ -106,7 +108,13 @@ function App() {
           );
         })}
       </div>
-      {gameStatus == "failed" ? <p>Vous avez perdu</p> : ""}
+      <Draw errorCount={errorCount} />
+      {gameStatus == "failed" && (
+        <div className="game-over">
+          <h1>Dommage ! Vous avez perdu</h1>
+          <Button onClick={restart}>Retenter ma chance</Button>
+        </div>
+      )}
     </div>
   );
 }
