@@ -5,14 +5,14 @@ import { Draw } from "./components/draw/Draw";
 import refresh from "./img/refresh.svg";
 
 function App() {
-  const [word, setWord] = useState(null);
-  const [hideWord, setHideWord] = useState(null);
+  const [word, setWord] = useState("");
+  const [hideWord, setHideWord] = useState("");
   const [errorCount, setErrorCount] = useState(0);
   const [gameStatus, setGameStatus] = useState("ongoing");
-  const [errorMessage, setErrorMessage] = useState(null);
+  const [errorMessage, setErrorMessage] = useState("");
   const maxError = 10;
 
-  const fetchWord = async () => {
+  const fetchWord = () => {
     fetch("http://localhost:3001/", {
       method: "POST",
       headers: {
@@ -23,7 +23,10 @@ function App() {
       }),
     })
       .then((res) => res.json())
-      .then((word) => setWord(word.word))
+      .then((word) => {
+        setWord(word.word);
+        setHideWord("_".repeat(word.word.length));
+      })
       .catch((err) => {
         console.log(err.message);
         setErrorMessage("Impossible de récupérer les données");
@@ -33,12 +36,6 @@ function App() {
   useEffect(() => {
     fetchWord();
   }, []);
-
-  useEffect(() => {
-    if (word) {
-      setHideWord("_".repeat(word.length));
-    }
-  }, [word]);
 
   const alphabet = [
     "a",
@@ -102,14 +99,21 @@ function App() {
     });
   };
 
+  const handleKeyDown = (e) => {
+    if (alphabet.includes(e.key)) {
+      const buttons = document.querySelectorAll(".keyboard button");
+      buttons.forEach((button) => {
+        if (button.innerText.toLowerCase() === e.key) {
+          console.log("click");
+          button.click();
+        }
+      });
+    }
+  };
+
   useEffect(() => {
-    const handleKeyDown = (e) => {
-      if (alphabet.includes(e.key)) {
-        checkWord(e.key, e);
-      }
-    };
     window.addEventListener("keydown", handleKeyDown);
-  });
+  }, []);
 
   return (
     <div className="App">
@@ -117,12 +121,10 @@ function App() {
       <div className="mid">
         <div className="mid-left">
           <div className="word">{hideWord}</div>
-          {errorCount > 0 ? (
+          {errorCount > 0 && (
             <p>
               Vous avez fait {errorCount} erreur{errorCount > 1 && "s"}
             </p>
-          ) : (
-            <p></p>
           )}
           <Button onClick={restart}>
             <img src={refresh} alt="" /> Changer de mot

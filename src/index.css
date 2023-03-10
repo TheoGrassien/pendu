@@ -67,7 +67,7 @@ h2 {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
-  gap: 12px;
+  gap: 16px;
 }
 
 .keyboard button {
@@ -85,14 +85,13 @@ h2 {
   max-width: 72px;
   height: 56px;
   border-radius: 4px;
-  box-shadow: 0px 0px 0 var(--blue-light);
+  box-shadow: 0px 6px 0 var(--blue-light);
   transition: 0.1s;
 }
 
 .keyboard button:hover {
   background: var(--blue-hover);
   cursor: pointer;
-  box-shadow: 0px 6px 0 var(--blue-light);
 }
 
 .keyboard button:active {
@@ -102,15 +101,12 @@ h2 {
 
 .keyboard button:disabled {
   background: var(--blue-light);
-}
-
-.keyboard button:disabled:hover {
   cursor: default;
-  box-shadow: 0px 0px 0 var(--blue-light);
 }
 
 .keyboard button:disabled:active {
   transform: translateY(0px);
+  box-shadow: 0px 6px 0 var(--blue-light);
 }
 
 .game-over {
