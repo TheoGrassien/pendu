@@ -4,8 +4,8 @@ import { useEffect, useRef } from "react";
 export const Draw = ({ errorCount }) => {
   return (
     <svg
-      width="381"
-      height="395"
+      width="300"
+      height="320"
       viewBox="0 0 381 395"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"

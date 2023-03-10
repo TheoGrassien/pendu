@@ -1,3 +1,12 @@
+:root {
+  --blue: #1c45d7;
+  --blue-light: #91a6ef;
+  --blue-lighter: #a8b9f54b;
+  --blue-hover: #153abb;
+  --blue-dark: #061239;
+  --blue-body: #8f93a3;
+}
+
 body {
   margin: 0;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
@@ -5,11 +14,20 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  color: var(--blue-dark);
 }
 
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
     monospace;
+}
+
+h1 {
+  margin-top: 48px;
+}
+
+h2 {
+  margin: 0;
 }
 
 .word {
@@ -21,4 +39,100 @@ code {
 
 .error {
   color: red;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 48px;
+}
+
+.mid {
+  display: flex;
+  gap: 56px;
+}
+
+.mid-left {
+  padding-top: 32px;
+}
+
+.mid-left .btn {
+  margin-top: 16px;
+}
+
+.keyboard {
+  width: 80vw;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 12px;
+}
+
+.keyboard button {
+  background: var(--blue);
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-weight: 700;
+  text-transform: uppercase;
+  width: 7%;
+  min-width: 48px;
+  max-width: 72px;
+  height: 56px;
+  border-radius: 4px;
+  box-shadow: 0px 0px 0 var(--blue-light);
+  transition: 0.1s;
+}
+
+.keyboard button:hover {
+  background: var(--blue-hover);
+  cursor: pointer;
+  box-shadow: 0px 6px 0 var(--blue-light);
+}
+
+.keyboard button:active {
+  transform: translateY(6px);
+  box-shadow: 0 0px 0 var(--blue-light);
+}
+
+.keyboard button:disabled {
+  background: var(--blue-light);
+}
+
+.keyboard button:disabled:hover {
+  cursor: default;
+  box-shadow: 0px 0px 0 var(--blue-light);
+}
+
+.keyboard button:disabled:active {
+  transform: translateY(0px);
+}
+
+.game-over {
+  position: fixed;
+  background-color: white;
+  padding: 24px;
+  box-shadow: 0px 0px 68px rgba(6, 18, 57, 0.15);
+  z-index: 2;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  border-radius: 4px;
+  gap: 24px;
+}
+
+.game-over-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  opacity: 0.7;
+  z-index: 1;
 }

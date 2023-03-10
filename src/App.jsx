@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { Button } from "./components/button/Button";
 import { Draw } from "./components/draw/Draw";
 
+import refresh from "./img/refresh.svg";
+
 function App() {
   const [word, setWord] = useState(null);
   const [hideWord, setHideWord] = useState(null);
@@ -67,7 +69,9 @@ function App() {
     "z",
   ];
 
-  const checkWord = (letter) => {
+  const checkWord = (letter, e) => {
+    e.target.disabled = true;
+
     if (errorCount >= maxError) {
       setGameStatus("failed");
       setErrorCount(maxError + 1);
@@ -92,28 +96,59 @@ function App() {
     setErrorCount(0);
     setGameStatus("ongoing");
     fetchWord();
+    const buttons = document.querySelectorAll("button");
+    buttons.forEach((button) => {
+      button.disabled = false;
+    });
   };
+
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (alphabet.includes(e.key)) {
+        checkWord(e.key, e);
+      }
+    };
+    window.addEventListener("keydown", handleKeyDown);
+  });
 
   return (
     <div className="App">
-      <p>Vous avez fait {errorCount} erreur(s)</p>
-      <div className="word">{hideWord}</div>
-      {errorMessage ? <p className="error">{errorMessage}</p> : ""}
+      <h1>Jeu du pendu !</h1>
+      <div className="mid">
+        <div className="mid-left">
+          <div className="word">{hideWord}</div>
+          {errorCount > 0 ? (
+            <p>
+              Vous avez fait {errorCount} erreur{errorCount > 1 && "s"}
+            </p>
+          ) : (
+            <p></p>
+          )}
+          <Button onClick={restart}>
+            <img src={refresh} alt="" /> Changer de mot
+          </Button>
+        </div>
+        <Draw errorCount={errorCount} />
+        {errorMessage ? <p className="error">{errorMessage}</p> : ""}
+      </div>
       <div className="keyboard">
         {alphabet.map((letter) => {
           return (
-            <Button key={letter} onClick={() => checkWord(letter)}>
+            <Button key={letter} onClick={(e) => checkWord(letter, e)}>
               {letter}
             </Button>
           );
         })}
       </div>
-      <Draw errorCount={errorCount} />
+
       {gameStatus == "failed" && (
-        <div className="game-over">
-          <h1>Dommage ! Vous avez perdu</h1>
-          <Button onClick={restart}>Retenter ma chance</Button>
-        </div>
+        <>
+          <div className="game-over">
+            <h2>Dommage ! Vous avez perdu.</h2>
+            <Button onClick={restart}>Retenter ma chance</Button>
+          </div>
+          <div className="game-over-overlay"></div>
+        </>
       )}
     </div>
   );
